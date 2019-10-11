@@ -21,7 +21,7 @@ In this first deliverable I imported the data,
 cleaned it up a bit, and created some continuous
 variables with which to create some graphs for analysis.
 
-[Here](deliverable1Link.html) is more information about the dataset.
+[Here](deliverable1Link.nb.html) is more information about the dataset.
 
 Provide a one-sentence introduction with what is covered by the first deliverable along with a link to another html page that gives the details.
 
