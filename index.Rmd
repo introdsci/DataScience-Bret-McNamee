@@ -1,6 +1,6 @@
 ---
-title: " " #replace the title with something short and catchy to represent your project
-subtitle: "____'s Data Science Portfolio" #replace blank with your name
+title: "The League of Legends Professional Scene" #replace the title with something short and catchy to represent your project
+subtitle: "Bret's Data Science Portfolio" #replace blank with your name
 output:
   html_document:
     df_print: paged
@@ -8,9 +8,20 @@ output:
 
 ## Abstract
 
-In under 250 words give a brief summary of the project so far.
+So far I have imported my data, cleaned it, added some
+more continuous variables, and created some visuals to
+analyze the data that I have created. My original data
+set did not have enough continous variables so I worked
+with the current variables to create some of my own that
+I used to created my visuals for this deliverable.
 
 ### 1. Discovery and Data Preparation
+
+In this first deliverable I imported the data, 
+cleaned it up a bit, and created some continuous
+variables with which to create some graphs for analysis.
+
+[Here is more information about the dataset](https://www.google.com)
 
 Provide a one-sentence introduction with what is covered by the first deliverable along with a link to another html page that gives the details.
 
