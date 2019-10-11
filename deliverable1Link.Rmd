@@ -2,26 +2,45 @@
 title: "Discovery and Data Prep"
 output: html_notebook
 ---
+## Deliverable 1
 
-There are a number of variables that I am using, they are
-all very similar to each other. The 20 main variables are
-the players that are in each game along with the champions
-that they played in those games. There are five players
-per team and each player plays their own champion.
-There different roles are Top, Jungle, Middle, ADC, and
-Support. The two teams are red and blue. The variables I
-created use the first letter of each word to shorten it.
-I.E. Red side Top Laner is called rT, and the champion 
-that they played is labeled as rTC where C stands for 
-champion. The other variables I used were which teams 
-participated in the games, one for each side. The length
-of the game in minutes, and the winner of the game were 
-two more variables used. The last two variables were the
-years that the games took place as well as the region or
-tournament that the game was played in.
+# Introduction
 
-[Here](https://www.google.com) is the link to the R code I used and some comments about how I created and cleaned my data.
+My Dataset is about League of Legends Professional matches and various stats about each game.
 
+# The Data
+
+I've used a subset of the data that I was given for this
+first deliverable.
+
+[Here](deliverable1.html) is the link to the R code
+I used and some comments about how I created and cleaned
+my data.
+
+# Source
+I retrieved my Data from kaggle and used it to created
+some more variables based off of their data.
+
+# In Depth of Variables
+
+region - the Region that the match was played  
+year  
+winner  
+blueTeam  
+redTeam  
+gameTime  
+*The rest of the variables can be described as  
+staring with r -> red team  
+starting with b-> blue team  
+ending with C meaning they are a Champion  
+not ending with C meaning the Player  
+T -> Top  
+J -> Jungle  
+M -> Middle  
+AD -> Marksman  
+S -> Support  
+the last four variables are the lists of champs/players
+that I used to help more easily create my data.  
 
 ## Visuals for Deliverable 1
 
@@ -51,9 +70,12 @@ Champs$Champ <- factor(Champs$Champ, levels = Champs$Champ[order(Champs$games)])
 ggplot(Champs, aes(x = Champ, y = games)) + theme(axis.text.x=element_text(angle=45, size = rel(0.75), margin = margin(0.5, unit = "cm"))) + geom_col()
 ```
 
-Since the graph is a little cluttlered at the moment since every champion is added here is the least picked and most picked champs
+Since the graph is a little cluttered at the moment since
+every champion is added, here is the least picked and
+most picked champs
 
 ```{r}
-tail(Champs[order(Champs$games),])
 head(Champs[order(Champs$games),])
+
+tail(Champs[order(Champs$games),])
 ```

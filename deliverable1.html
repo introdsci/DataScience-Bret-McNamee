@@ -366,7 +366,7 @@ summary {
 </div>
 
 
-<p>Creating my data frame (tibble) that I am going to use for my first deliverable. I have renamed columns to make them easier to reference. I used the first initial of each word to shorten the name.</p>
+<p>Here is the creation of my data frame (tibble) that I am going to use for my first deliverable. I have renamed columns to make them easier to reference. I used the first initial of each word to shorten the name.</p>
 <pre class="r"><code>suppressMessages(library(tidyverse))
 suppressMessages(library(tidyr))
 
@@ -393,10 +393,9 @@ data &lt;- read_csv(&quot;LeagueofLegends.csv&quot;)</code></pre>
     rMC=data$redMiddleChamp, rADC=data$redADCChamp,
     rSC=data$redSupportChamp,
     rT=data$redTop, rJ=data$redJungle, rM=data$redMiddle,
-    rAD=data$redADC, rS=data$redSupport)
-
-
-tData[&quot;redPlayers&quot;] &lt;- NA
+    rAD=data$redADC, rS=data$redSupport)</code></pre>
+<p>I am creating four new columns, these columns will contain lists of the players/champions that participated in the games to make it easier to calculate the win percentage and other factors.</p>
+<pre class="r"><code>tData[&quot;redPlayers&quot;] &lt;- NA
 tData[&quot;bluePlayers&quot;] &lt;- NA
 tData[&quot;redChamps&quot;] &lt;- NA
 tData[&quot;blueChamps&quot;] &lt;- NA
@@ -419,7 +418,9 @@ for(i in 1:nrow(tData)){
       tData$bSC[i] ,sep=&quot;, &quot;)
 }
 ##&gt; str_detect(df$redPlayers[23], RedPlayers[1])</code></pre>
-<p>I created lists that contain each Pro Player that is referenced in here, and calcutated their number of wins,total number of wins, and win percentage.. And also did the same with the Champs that were played, this helped to create some more continuous variables.</p>
+<p>I created lists that contain each Pro Player that is referenced in here, and calculated their number of wins,total number of wins, and win percentage.</p>
+<p>I also did the same with the Champs that were played, this helped to create some more continuous variables with which to create some visuals with.</p>
+<p>I create lists with the unique Players/Champs as well as initializing any variables I will associate with them.</p>
 <pre class="r"><code>BluePlayers &lt;- unique(c(unique(tData$bT), unique(tData$bJ), unique(tData$bM), unique(tData$bAD), unique(tData$bS)))
                      
 RedPlayers &lt;- unique(c(unique(tData$rT), unique(tData$rJ), unique(tData$rM), unique(tData$rAD), unique(tData$rS)))
@@ -433,9 +434,9 @@ Players &lt;- data.frame(Player=c(RedPlayers,BluePlayers),wins=0, games=0, winPc
 Champs &lt;- data.frame(Champ= c(RedChamps,BlueChamps), wins=0, games=0, winPct = 0)
 
 Players &lt;- unique(Players)
-Champs &lt;- unique(Champs)
-
-for (i in 1:nrow(tData)){
+Champs &lt;- unique(Champs)</code></pre>
+<p>Here I am iterating over every match, then iterating through the lists of Players/Champs incrementing the games played/number of wins for each Player/Champ.</p>
+<pre class="r"><code>for (i in 1:nrow(tData)){
   for(j in 1:length(RedPlayers)){
   if(str_detect(tData$redPlayers[i], RedPlayers[j])){
     if(tData$winner[i] == 0){
@@ -477,9 +478,9 @@ for (i in 1:nrow(tData)){
     Champs$games[Champs$Champ==BlueChamps[j]]&lt;- Champs$games[Champs$Champ==BlueChamps[j]] + 1
   }
 }   
-}
-
-Players$winPct &lt;- Players$wins / Players$games
+}</code></pre>
+<p>Here I am calculating the win percentages for each Player/Champ and storing it into the winPct column in each of my DataFrames</p>
+<pre class="r"><code>Players$winPct &lt;- Players$wins / Players$games
 Champs$winPct &lt;- Champs$wins / Champs$games</code></pre>
 
 
