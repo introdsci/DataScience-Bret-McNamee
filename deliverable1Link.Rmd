@@ -79,3 +79,16 @@ head(Champs[order(Champs$games),])
 
 tail(Champs[order(Champs$games),])
 ```
+
+
+## Future Questions
+
+Some things I want to look into is how champion win rates and player win rates have changed over time
+
+Right now I only have them clumped into the same category, I will need to split up the statistics by the year the game was played.
+
+Another thing that I want to look at is the average game time with respect to the gold differences/towers/dragons/barons and kills.
+
+One thing that I can't look into is what updates were released about the game. Some updates have been known to extend/reduce game times. 
+
+Individual champions have also had changes to them that will affect how good they are resulting in either a higher or lower win rate.
