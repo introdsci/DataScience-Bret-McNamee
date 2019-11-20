@@ -8,6 +8,8 @@ output:
 
 ## Abstract
 
+[Here](https://www.youtube.com/watch?v=BGtROJeMPeE) is a link to a short video describing what league of legends is.
+
 So far I have imported my data, cleaned it, added some
 more continuous variables, and created some visuals to
 analyze the data that I have created. My original data
@@ -21,13 +23,21 @@ In this first deliverable I imported the data,
 cleaned it up a bit, and created some continuous
 variables with which to create some graphs for analysis.
 
-[Here](deliverable1Link.nb.html) is more information about the dataset.
+The second deliverable brought in another 
 
-Provide a one-sentence introduction with what is covered by the first deliverable along with a link to another html page that gives the details.
+[Here](deliverable1Link.nb.html) is more information about the dataset.
 
 ### 2. Model Planning and Building
 
-Coming soon...
+The model that I want to focus on is how win rates
+between individual champions changes over time.
+My first dataset coveres the years 2015-2018, and
+the new dataset covers the summer 2019 season. 
+I am comparing how champions have gotten better
+or worse over the years.
+
+For an in depth look at these data comparisons
+click [here](deliverable2.html)
 
 ### 3. Results and Operationalization
 

@@ -1,0 +1,125 @@
+---
+title: "deliverable2"
+author: "Bret McNamee"
+date: "11/19/2019"
+output: html_document
+---
+
+This dataset is about champions win rates/pick rates
+over the summer 2019 season. I retrieved the data
+from oracleselixir.com which is a website that 
+contains lots of data with regards to LoL.
+
+
+This chunk of code will load in the appropriate
+libraries and run the code/create the tables
+from the previous delivarable
+
+```{r}
+suppressMessages(library("tidyverse"))
+suppressMessages(library("dplyr"))
+suppressMessages(library("tidyr"))
+suppressMessages(library("rvest"))
+suppressMessages(library("knitr"))
+
+purl("deliverable1.Rmd", output="part1.r")
+source("part1.r")
+```
+This bit of code web scrapes information about champions and their pick/ban rates.
+
+This data is specifically from the summer 2019 split
+over all of the regions.
+
+We are pulling only the columns that will be of use to us and then putting them into a tibble
+
+```{r}
+url <- read_html("https://oracleselixir.com/statistics/champions/2019-summer-champion-statistics/")
+
+tmp <- url %>% html_nodes("tr")
+
+champ <- tmp %>% html_nodes("td.column-1") %>% html_text()
+
+role <- tmp %>% html_nodes("td.column-2") %>% html_text()
+
+gamesPlayed <- tmp %>% html_nodes("td.column-3") %>% html_text() %>% as.integer()
+
+pickRate <- tmp %>% html_nodes("td.column-4") %>% html_text()
+
+banRate <- tmp %>% html_nodes("td.column-5") %>% html_text()
+
+winPct <- tmp %>% html_nodes("td.column-7") %>% html_text()
+
+summer2019 <- tibble(champ = champ, role = role, gamesPlayed = gamesPlayed, pickRate= pickRate, banRate = banRate, winpct = winPct)
+```
+
+Some of the values are currently stored as characters, but we need them to be stored as integers or floats so we are going to trim the '%' character off of them and then convert them to a double.
+
+```{r}
+summer2019$pickRate <- str_remove(summer2019$pickRate, '%') %>% as.double()
+
+summer2019$banRate <- str_remove(summer2019$banRate, '%') %>% as.double()
+
+summer2019$winpct <- str_remove(summer2019$winpct, '%') %>% as.double()
+```
+
+Here we will clean the data so that each champion
+will only have one row. Currently there is a row for
+each role that the champion has been played in. We 
+don't care about specific roles, just that the 
+champion was in the game.
+
+```{r}
+summer2019$gamesWon <- as.integer(summer2019$gamesPlayed * ( summer2019$winpct/100))
+
+totGames <- tibble(champ = unique(summer2019$champ),
+                   gamesPlayed2019 = 0,
+                   gamesWon2019 = 0,
+                   gamesPlayedP1 = 0,
+                   gamesWonP1 = 0,
+                   winRate2019 = 0,
+                   winRateP1 = 0)
+
+for(i in 1:nrow(totGames)){
+  totGames$gamesPlayed2019[i] <- sum(summer2019$gamesPlayed[summer2019$champ==totGames$champ[i]])
+  
+  totGames$gamesWon2019[i] <- sum(summer2019$gamesWon[summer2019$champ==totGames$champ[i]])
+  
+  totGames$winRate2019[i] <-  (totGames$gamesWon2019[i] / totGames$gamesPlayed2019[i]) * 100
+
+  if(any(totGames$champ[i] == Champs)){
+  totGames$gamesPlayedP1[i] <- Champs$games[Champs$Champ==totGames$champ[i]]
+  
+  totGames$gamesWonP1[i] <- Champs$wins[Champs$Champ==totGames$champ[i]]
+  
+  totGames$winRateP1[i] <- Champs$winPct[Champs$Champ==totGames$champ[i]] * 100
+  } 
+}
+## Here is how the table turned out.
+head(totGames)
+```
+The model that I am looking at is how winrates have changed over the course of League's lifetime. 
+The data that we do not know is the buffs and nerfs that champions have undergone throughout their lifespan. Champions will become better or worse depending on the current meta of pro play and how powerful their abilities are with the correct items.
+These are unknown factors that contribute to the changes in win rate and pick rate.
+
+The graph shows the difference in win rates between champions. Champions that were only picked in either the 2019 season or over the 2015-2018 seasons will have a skewed output. I am keeping them in the graph however, because it shows that a champion has completely fallen off the map or has come into relevance in pro play.
+
+Also, some champions were released after the 2015-2018 seasons meaning that they will definitely not have any data from back then. Some however, had a drastic impact on pro play once they were released.
+```{r}
+
+ggplot(totGames, aes(x=champ, y=(winRate2019-winRateP1))) + 
+  theme(axis.text.x=element_text(angle=45,
+  size = rel(0.75), margin = 
+  margin(0.5, unit = "cm"))) + geom_col()
+
+```
+
+This graph is pretty ugly considering it has every champ in it. Let's filter it to only contain champions that have a lot of games played. Champions with not very many games played are insignificant in this comparison.
+
+```{r}
+games100 <- filter(totGames, totGames$gamesPlayed2019 > 100)
+
+ggplot(games100, aes(x=champ, y=(winRate2019-winRateP1))) + 
+  theme(axis.text.x=element_text(angle=45,
+  size = rel(0.75), margin = 
+  margin(0.5, unit = "cm"))) + geom_col()
+```

@@ -1,14 +1,4 @@
----
-title: "deliverable1"
-output: html_document
----
-
-Here is the creation of my data frame (tibble) that I am
-going to use for my first deliverable. I have renamed
-columns to make them easier to reference. I used the
-first initial of each word to shorten the name.
-
-```{r}
+## ------------------------------------------------------------------------
 suppressMessages(library(tidyverse))
 suppressMessages(library(tidyr))
 
@@ -27,15 +17,9 @@ tData <- dplyr::tibble(region=data$League,
     rSC=data$redSupportChamp,
     rT=data$redTop, rJ=data$redJungle, rM=data$redMiddle,
     rAD=data$redADC, rS=data$redSupport)
-```
-
-I am creating four new columns, these columns will 
-contain lists of the players/champions that 
-participated in the games to make it easier to
-calculate the win percentage and other factors.
 
 
-```{r}
+## ------------------------------------------------------------------------
 
 tData["redPlayers"] <- NA
 tData["bluePlayers"] <- NA
@@ -62,16 +46,9 @@ for(i in 1:nrow(tData)){
 ##> str_detect(df$redPlayers[23], RedPlayers[1])
 
 
-```
 
-I created lists that contain each Pro Player that is
-referenced in here, and calculated their number of wins,total number of wins, and win percentage.
 
-I also did the same with the Champs that were played, this helped to create some more continuous variables with which to create some visuals with.
-
-I create lists with the unique Players/Champs as well as initializing any variables I will associate with them.
-
-```{r}
+## ------------------------------------------------------------------------
 BluePlayers <- unique(c(unique(tData$bT), unique(tData$bJ), unique(tData$bM), unique(tData$bAD), unique(tData$bS)))
                      
 RedPlayers <- unique(c(unique(tData$rT), unique(tData$rJ), unique(tData$rM), unique(tData$rAD), unique(tData$rS)))
@@ -87,13 +64,9 @@ Champs <- data.frame(Champ= c(RedChamps,BlueChamps), wins=0, games=0, winPct = 0
 Players <- unique(Players)
 Champs <- unique(Champs)
 
-```
 
-Here I am iterating over every match, then iterating
-through the lists of Players/Champs incrementing the
-games played/number of wins for each Player/Champ.
 
-```{r}
+## ------------------------------------------------------------------------
 
 for (i in 1:nrow(tData)){
   for(j in 1:length(RedPlayers)){
@@ -138,15 +111,11 @@ for (i in 1:nrow(tData)){
   }
 }   
 }
-```
 
-Here I am calculating the win percentages for each
-Player/Champ and storing it into the winPct column in 
-each of my DataFrames
 
-```{r}
+## ------------------------------------------------------------------------
 
 Players$winPct <- Players$wins / Players$games
 Champs$winPct <- Champs$wins / Champs$games
 
-```
+
