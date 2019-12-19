@@ -23,23 +23,22 @@ In this first deliverable I imported the data,
 cleaned it up a bit, and created some continuous
 variables with which to create some graphs for analysis.
 
-The second deliverable brought in another 
-
 [Here](deliverable1Link.nb.html) is more information about the dataset.
 
 ### 2. Model Planning and Building
 
-The model that I want to focus on is how win rates
-between individual champions changes over time.
-My first dataset coveres the years 2015-2018, and
-the new dataset covers the summer 2019 season. 
-I am comparing how champions have gotten better
-or worse over the years.
+The model that I want to focus on is what factors of a game
+have the most impact on the win rate. The facctors that I am
+looking at are the differences in xp, gold, cs, and KDA primarily.
+These will be narrowed down as I run the model.
 
 For an in depth look at these data comparisons
 click [here](deliverable2.html)
 
 ### 3. Results and Operationalization
 
-Coming soon...
+In [this](deliverable3.html) page you will find the model, and the 
+analysis that I have done on the model.
+I have talked about what the results mean, and why the solutions may
+not always be the most optimal approach to ensuring a victory.
 

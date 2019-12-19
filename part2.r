@@ -1,21 +1,4 @@
----
-title: "deliverable2"
-author: "Bret McNamee"
-date: "11/19/2019"
-output: html_document
----
-
-This dataset is about champions win rates/pick rates
-over the summer 2019 season. I retrieved the data
-from oracleselixir.com which is a website that 
-contains lots of data with regards to LoL.
-
-
-This chunk of code will load in the appropriate
-libraries and run the code/create the tables
-from the previous delivarable
-
-```{r}
+## ------------------------------------------------------------------------
 suppressMessages(library("tidyverse"))
 suppressMessages(library("dplyr"))
 suppressMessages(library("tidyr"))
@@ -24,15 +7,9 @@ suppressMessages(library("knitr"))
 
 #purl("deliverable1.Rmd", output="part1.r")
 #source("part1.r")
-```
-This bit of code web scrapes information about champions and their pick/ban rates.
 
-This data is specifically from the summer 2019 split
-over all of the regions.
 
-We are pulling only the columns that will be of use to us and then putting them into a tibble
-
-```{r}
+## ------------------------------------------------------------------------
 url <- read_html("https://oracleselixir.com/statistics/champions/2019-summer-champion-statistics/")
 
 tmp <- url %>% html_nodes("tr")
@@ -59,25 +36,17 @@ csd10 <- tmp %>% html_nodes("td.column-20") %>% html_text() %>% as.double()
 
 summer2019 <- tibble(champ = champ, role = role, gamesPlayed = gamesPlayed, pickRate= pickRate, banRate = banRate, winpct = winPct, KDA = KDA,
     gd10 = gd10, xpd10 = xpd10, csd10 = csd10)
-```
 
-Some of the values are currently stored as characters, but we need them to be stored as integers or floats so we are going to trim the '%' character off of them and then convert them to a double.
 
-```{r}
+## ------------------------------------------------------------------------
 summer2019$pickRate <- str_remove(summer2019$pickRate, '%') %>% as.double()
 
 summer2019$banRate <- str_remove(summer2019$banRate, '%') %>% as.double()
 
 summer2019$winpct <- str_remove(summer2019$winpct, '%') %>% as.double()
-```
 
-Here we will clean the data so that each champion
-will only have one row. Currently there is a row for
-each role that the champion has been played in. We 
-don't care about specific roles, just that the 
-champion was in the game.
 
-```{r}
+## ------------------------------------------------------------------------
 summer2019$gamesWon <- as.integer(summer2019$gamesPlayed * ( summer2019$winpct/100))
 
 totGames <- tibble(champ = unique(summer2019$champ),
@@ -105,30 +74,22 @@ for(i in 1:nrow(totGames)){
 }
 ## Here is how the table turned out.
 head(totGames)
-```
-The model that I am looking at is how winrates have changed over the course of League's lifetime. 
-The data that we do not know is the buffs and nerfs that champions have undergone throughout their lifespan. Champions will become better or worse depending on the current meta of pro play and how powerful their abilities are with the correct items.
-These are unknown factors that contribute to the changes in win rate and pick rate.
 
-The graph shows the difference in win rates between champions. Champions that were only picked in either the 2019 season or over the 2015-2018 seasons will have a skewed output. I am keeping them in the graph however, because it shows that a champion has completely fallen off the map or has come into relevance in pro play.
 
-Also, some champions were released after the 2015-2018 seasons meaning that they will definitely not have any data from back then. Some however, had a drastic impact on pro play once they were released.
-```{r}
+## ------------------------------------------------------------------------
 
 ggplot(totGames, aes(x=champ, y=(winRate2019-winRateP1))) + 
   theme(axis.text.x=element_text(angle=45,
   size = rel(0.75), margin = 
   margin(0.5, unit = "cm"))) + geom_col()
 
-```
 
-This graph is pretty ugly considering it has every champ in it. Let's filter it to only contain champions that have a lot of games played. Champions with not very many games played are insignificant in this comparison.
 
-```{r}
+## ------------------------------------------------------------------------
 games100 <- filter(totGames, totGames$gamesPlayed2019 > 100)
 
 ggplot(games100, aes(x=champ, y=(winRate2019-winRateP1))) + 
   theme(axis.text.x=element_text(angle=45,
   size = rel(0.75), margin = 
   margin(0.5, unit = "cm"))) + geom_col()
-```
+

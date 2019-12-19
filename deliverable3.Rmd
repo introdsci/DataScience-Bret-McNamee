@@ -1,0 +1,70 @@
+---
+title: "deliverable3"
+author: "Bret McNamee"
+date: "12/18/2019"
+output: html_document
+---
+
+In this section we will be creating a model and then testing our model to see how well it can predict our outcome.
+We will be modeling the effects of different game stats and seeing how they change the win rate for each champion.  
+
+Note: In deliverable 2, I webscraped some more data and added it to my
+dataframe, but other than that it remains unchanged.
+
+
+First we will load in the tables from our previous section that we webscraped from the internet.
+
+```{r}
+suppressMessages(library("tidyverse"))
+suppressMessages(library("dplyr"))
+suppressMessages(library("tidyr"))
+suppressMessages(library("rvest"))
+suppressMessages(library("knitr"))
+
+source("part1.r")
+
+purl("deliverable2.Rmd", output="part2.r")
+source("part2.r")
+
+
+```
+Here we will create a model with the dependent variable being the winrate and a number of different independent variables.
+
+```{r}
+set.seed(86) 
+ 
+sample <- sample.int(n = nrow(summer2019), 
+                     size = floor(.75*nrow(summer2019)), # Selecting 70% of data
+                     replace = F)
+ 
+train <- summer2019[sample, ]
+test  <- summer2019[-sample, ]
+
+model <- lm(winpct~KDA+gd10, train)
+summary(model)
+
+```
+
+Now that we have our model we will test to see how accurate it is.
+
+```{r}
+predictions <- model %>% predict(test)
+
+predictions[is.na(predictions)] <- 0
+
+head(predictions)
+
+(mean(predictions - test$winpct))
+```
+
+So far we have made the model, tested the model with some of our data(data that we did not use to create the model) and then compared the data we obtained from testing it to the correct data that we have webscraped.
+
+What this mean that we have found is telling us is that our model, on average, generates around a 5% lower winrate than the actual data. Which overall is not a bad model.
+
+What we can conclude from this model is that in order to raise your winrate you need to obtain more gold than your opponent and die fewer times. Dying fewer times will result in a higher KDA Ratio.
+
+There are a few things wrong with this solution however.... if the role you are playing is support, then gold is less valuable on you. What this means is that when there are multiple teammates that can obtain a kill, the support role should NOT be the one to get it. This results in less gold for the support, but the gold is better spent on a carry role that will have a larger impact on the game.
+
+As for the KDA factor, if a player plays only to have a higher ratio, and tries their best to not die, then they become less of a team player. Which, in a team game, is pretty important in winning the game. Also there are times in a game where if you are the support, you dying will keep one of your carries alive. Which in return will help your team to do better overall at the current point in the game. This is a case where you lowering your KDA Ratio will overall positively impact your team.
+
+Some factors that we cannot control, with respect to these two variables, is how effective your teammates are with the gold. For instance, if you are the support and you give the gold to your carry, your carry may be worse than you and you having the gold could have had a bigger impact on the game. You are unable to tell at the time who the gold is going to be better on.
